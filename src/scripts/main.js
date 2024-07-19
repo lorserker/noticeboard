@@ -3,7 +3,7 @@
 const OWNER = "lorserker";
 const REPO = "noticeboard";
 
-const DATA = {"start": null, "result": null};
+const DATA = {"start": null, "result": null, "schedule": null};
 
 export async function listGithub(owner, repo, path) {
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
@@ -60,6 +60,15 @@ function drawContent() {
     contentDiv.innerHTML = html;
 }
 
+function drawSchedule() {
+    console.log("drawing schedule");
+    const scheduleDiv = document.getElementById("schedule");
+
+    const html = `<h3><a type="button" class="outline" href="${DATA.schedule}">Zeitplan</a></h3>`;
+
+    scheduleDiv.innerHTML = html;
+}
+
 function generateListHtml(files) {
     let html = '';
     html += '<ul>';
@@ -87,6 +96,10 @@ async function main() {
         document.body.innerHTML = '<p>Wettkampf nicht gefunden.</p><p>Haben Sie den richtigen Link?</p>';
         return;
     }
+
+    DATA["schedule"] = `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/pdf/schedule/${label}.pdf`
+
+    drawSchedule();
 
     const [filesStart, filesResult] = await Promise.all([
         listGithub(OWNER, REPO, `pdf/${label}/start`),
