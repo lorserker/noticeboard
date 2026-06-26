@@ -2,7 +2,6 @@
   "name": "noticeboard",
   "version": "1.0.0",
   "description": "",
-  "main": "src/scripts/main.js",
   "type": "module",
   "compilerOptions": {
     "target": "ES6"
