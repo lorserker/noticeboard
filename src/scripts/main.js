@@ -56,6 +56,10 @@ function drawContent() {
         html += '<h3>Startlisten</h3>';
         html += generateListHtml(DATA["start"][selected]);
     }
+    if (selected in DATA["diploma"]) {
+        html += '<h3>Urkunden</h3>';
+        html += generateListHtml(DATA["diploma"][selected]);
+    }
 
     contentDiv.innerHTML = html;
 }
@@ -101,20 +105,25 @@ async function main() {
 
     drawSchedule();
 
-    const [filesStart, filesResult] = await Promise.all([
+    const [filesStart, filesResult, filesDiploma] = await Promise.all([
         listGithub(OWNER, REPO, `pdf/${label}/start`),
         listGithub(OWNER, REPO, `pdf/${label}/ergebnis`),
+        listGithub(OWNER, REPO, `pdf/${label}/diploma`),
     ]);
     console.log("fetched");
 
     DATA["start"] = filesStart;
     DATA["result"] = filesResult;
+    DATA["diploma"] = filesDiploma;
 
     const categorySet = {};
     for (let key in filesStart) {
         categorySet[key] = null;
     }
     for (let key in filesResult) {
+        categorySet[key] = null;
+    }
+    for (let key in filesDiploma) {
         categorySet[key] = null;
     }
     const categoryList = Object.keys(categorySet).sort();
